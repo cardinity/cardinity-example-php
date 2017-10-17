@@ -4,7 +4,7 @@
 1. Download files
 2. Navigate to directory location
 3. Run composer `php composer.phar install`
-4. Rename file `example.env` into `.env` and fill Cardinity API credentials
+4. Rename file `.env.example` into `.env` and fill Cardinity API credentials
 5. Start internal PHP server `php -S localhost:8000 -t public`
 6. Launch browser with url `http://localhost:8000`
 
