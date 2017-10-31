@@ -1,10 +1,10 @@
 <fieldset>
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a class="nav-link active" href="payment">Create new payment</a>
+            <a class="nav-link" href="payment">Create new payment</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="recurring">Create recurring payment</a>
+            <a class="nav-link" href="recurring">Create recurring payment</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="refund">Create new refund</a>

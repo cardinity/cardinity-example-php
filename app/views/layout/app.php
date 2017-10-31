@@ -6,9 +6,9 @@
 
     <title>Cardinity</title>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <link rel=stylesheet type=text/css href="<?php echo getenv('PUBLIC_ROOT'); ?>/css/app.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="<?php echo getenv('PUBLIC_ROOT'); ?>/css/app.css">
 </head>
 <body>
 <header>
@@ -50,7 +50,10 @@
     </div>
 </div>
 <footer class="footer">
-    <p>Card Processing by <a href="https://cardinity.com" target="_blank"><img src="<?php echo getenv('PUBLIC_ROOT'); ?>/img/by.png" alt="Cardinity"></a>
+    <p>Card Processing by
+        <a href="https://cardinity.com" target="_blank">
+            <img src="<?php echo getenv('PUBLIC_ROOT'); ?>/img/by.png" alt="Cardinity">
+        </a>
     </p>
 </footer>
 </body>
