@@ -27,7 +27,7 @@ class CardinityController extends Controller
 
         if (isset($_POST['order']) && isset($_POST['card'])) {
             $method = new Cardinity\Method\Payment\Create([
-                'amount' => (float)sprintf("%.2f", $_POST['order']['amount']),
+                'amount' => (float)sprintf('%.2f', $_POST['order']['amount']),
                 'currency' => $_POST['order']['currency'],
                 'settle' => ($_POST['order']['settle']) ? true : false,
                 'description' => $_POST['order']['description'],
@@ -68,7 +68,7 @@ class CardinityController extends Controller
                     $render = $result;
                 }
             }
-            unset($_SESSION["cardinity"]);
+            unset($_SESSION['cardinity']);
         }
 
         $this->view->render($render);
@@ -81,7 +81,7 @@ class CardinityController extends Controller
         if (isset($_POST['refund'])) {
             $method = new Cardinity\Method\Refund\Create(
                 $_POST['refund']['payment_id'],
-                (float)sprintf("%.2f", $_POST['refund']['amount']),
+                (float)sprintf('%.2f', $_POST['refund']['amount']),
                 $_POST['refund']['description']
             );
 
@@ -100,7 +100,7 @@ class CardinityController extends Controller
 
         if (isset($_POST['recurring'])) {
             $method = new Cardinity\Method\Payment\Create([
-                'amount' => (float)sprintf("%.2f", $_POST['recurring']['amount']),
+                'amount' => (float)sprintf('%.2f', $_POST['recurring']['amount']),
                 'currency' => $_POST['recurring']['currency'],
                 'settle' => ($_POST['recurring']['settle']) ? true : false,
                 'description' => $_POST['recurring']['description'],
@@ -128,7 +128,7 @@ class CardinityController extends Controller
         if (isset($_POST['settle'])) {
             $method = new Cardinity\Method\Settlement\Create(
                 $_POST['settle']['payment_id'],
-                (float)sprintf("%.2f", $_POST['settle']['amount']),
+                (float)sprintf('%.2f', $_POST['settle']['amount']),
                 $_POST['settle']['description']
             );
 

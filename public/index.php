@@ -5,7 +5,7 @@ session_start();
 putenv('PUBLIC_ROOT=' . substr($_SERVER['SCRIPT_NAME'], 0, strpos($_SERVER['SCRIPT_NAME'], '/index.php')));
 $env = parse_ini_file(__DIR__ . '/../.env');
 foreach ($env as $key => $value) {
-    putenv($key . "=" . $value);
+    putenv($key . '=' . $value);
 }
 
 require_once __DIR__ . '/../vendor/autoload.php';
