@@ -32,29 +32,6 @@ class CardinityController extends Controller
     {
         $render = 'payment';
 
-        /*$browserInfo = new BrowserInfo();
-        $browserInfo->setAcceptHeader('text/html');
-        $browserInfo->setBrowserLanguage('en-US');
-        $browserInfo->setScreenWidth(1920);
-        $browserInfo->setScreenHeight(1040);
-        $browserInfo->setChallengeWindowSize("1920x1040");
-        $browserInfo->setUserAgent("Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) Gecko/20100101 Firefox/21.0");
-        $browserInfo->setColorDepth(24);
-        $browserInfo->setTimeZone(-60);
-
-        $billingAddress = new Address();
-        $billingAddress->setAddressLine1("Test line");
-        $billingAddress->setCity("balbieriskis");
-        $billingAddress->setCountry("LT");
-        $billingAddress->setPostalCode("0234");
-
-
-        $threeDS2Data = new ThreeDS2Data();
-        $threeDS2Data->setNotificationUrl('https://notification.url/');            
-        $threeDS2Data->setBrowserInfo($browserInfo);
-        $threeDS2Data->setBillingAddress($billingAddress);*/
-      
-
         if (isset($_POST['order']) && isset($_POST['card'])) {
             $method = new Payment\Create([
                 'amount' => (float)sprintf('%.2f', $_POST['order']['amount']),
@@ -253,7 +230,8 @@ class CardinityController extends Controller
                     $pending = [
                         'acs_url' => $auth->getAcsUrl(),
                         'creq' => $auth->getCreq(),
-                        'threeDSSessionData' => $payment->getOrderId()
+                        'threeDSSessionData' => $payment->getOrderId(),
+                        'PaymentId' => $payment->getId(),
                     ];
                     $_SESSION['cardinity'] = $pending;
     
