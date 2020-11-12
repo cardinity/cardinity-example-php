@@ -52,13 +52,13 @@ class CardinityController extends Controller
                     "notification_url" => getenv('BASE_URL') . "/callback3dsv2", 
                     "browser_info" => [
                         "accept_header" => "text/html",
-                        "browser_language" => "en-US",
-                        "screen_width" => 1920,
-                        "screen_height" => 1040,
-                        'challenge_window_size' => "390x400",
-                        "user_agent" => "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) Gecko/20100101 Firefox/21.0",
-                        "color_depth" => 24,
-                        "time_zone" => -60
+						"browser_language" => $_POST['browser_info']['browser_language'] ?? "en-US",
+						"screen_width" => (int) $_POST['browser_info']['screen_width'] ?? 1920,
+						"screen_height" => (int) $_POST['browser_info']['screen_height'] ?? 1040,
+						'challenge_window_size' => $_POST['browser_info']['challenge_window_size'],
+						"user_agent" => $_SERVER['HTTP_USER_AGENT'] ?? "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) Gecko/20100101 Firefox/21.0",
+						"color_depth" => (int) $_POST['browser_info']['color_depth'] ?? 24,
+						"time_zone" =>  (int) $_POST['browser_info']['time_zone'] ?? -60
                     ],
                 ],
             ]);
@@ -225,7 +225,7 @@ class CardinityController extends Controller
             } elseif ($status == 'pending') {
 
                 if ($payment->isThreedsV2()) {
-                    $auth = $payment->getThreeDS2AuthorizationInformation();
+                    $auth = $payment->getThreeds2data();
 
                     $pending = [
                         'acs_url' => $auth->getAcsUrl(),

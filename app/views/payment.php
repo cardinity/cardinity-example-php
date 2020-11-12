@@ -5,7 +5,7 @@
         <div class="form-group row">
             <label class="col-md-4 col-form-label">Amount</label>
             <div class="col-md-5">
-                <input name="order[amount]" required class="form-control" placeholder="Amount" value="29"/>
+                <input name="order[amount]" required class="form-control" placeholder="Amount" value="29" />
             </div>
             <div class="col-md-3">
                 <select name="order[currency]" required class="form-control">
@@ -18,8 +18,7 @@
         <div class="form-group row">
             <label class="col-md-4 col-form-label">Order ID</label>
             <div class="col-md-8">
-                <input name="order[order_id]" class="form-control" value="<?php echo uniqid(); ?>"
-                       placeholder="Order ID"/>
+                <input name="order[order_id]" class="form-control" value="<?php echo uniqid(); ?>" placeholder="Order ID" />
             </div>
         </div>
         <div class="form-group row">
@@ -47,7 +46,7 @@
         <div class="form-group row">
             <label class="col-md-4 col-form-label">Description</label>
             <div class="col-md-8">
-                <input name="order[description]" class="form-control" placeholder="Description"/>
+                <input name="order[description]" class="form-control" placeholder="Description" />
             </div>
         </div>
     </fieldset>
@@ -58,8 +57,7 @@
         <div class="form-group row">
             <label class="col-md-4 col-form-label">Card holder</label>
             <div class="col-md-8">
-                <input name="card[holder]" required class="form-control"
-                       placeholder="Enter your full name" value="TestShababDSVTWO">
+                <input name="card[holder]" required class="form-control" placeholder="Enter your full name" value="TestShababDSVTWO">
             </div>
         </div>
         <div class="form-group row">
@@ -103,4 +101,55 @@
             <button class="btn btn-success btn-lg px-5">Pay</button>
         </div>
     </div>
+
+    <input type='hidden' id='screen_width' name='browser_info[screen_width]' value='' />
+    <input type='hidden' id='screen_height' name='browser_info[screen_height]' value='' />
+    <input type='hidden' id='challenge_window_size' name='browser_info[challenge_window_size]' value='' />
+    <input type='hidden' id='browser_language' name='browser_info[browser_language]' value='' />
+    <input type='hidden' id='color_depth' name='browser_info[color_depth]' value='' />
+    <input type='hidden' id='time_zone' name='browser_info[time_zone]' value='' />
+
 </form>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("screen_width").value = window.innerWidth;
+        document.getElementById("screen_height").value = window.innerHeight;
+        document.getElementById("browser_language").value = navigator.language;
+        document.getElementById("color_depth").value = screen.colorDepth;
+        document.getElementById("time_zone").value = new Date().getTimezoneOffset();
+
+        
+        var availChallengeWindowSizes = [
+            [600, 400],
+            [500, 600],
+            [390, 400],
+            [250, 400]
+        ];
+
+        var cardinity_screen_width = window.innerWidth;
+        var cardinity_screen_height = window.innerHeight;
+        document.getElementById("challenge_window_size").value = 'full-screen';
+
+        //display below 800x600        
+        if (!(cardinity_screen_width > 800 && cardinity_screen_height > 600)) {                        
+            //find largest acceptable size
+            availChallengeWindowSizes.every(function(element, index) {
+                console.log(element);
+                if (element[0] > cardinity_screen_width || element[1] > cardinity_screen_height) {
+                    //this challenge window size is not acceptable
+                    console.log('skip');
+                    return true;
+                } else {
+                    document.getElementById("challenge_window_size").value = element[0]+'x'+element[1];
+                    console.log(element[0]+'x'+element[1]);
+                    return false;
+                }        
+            });
+        }
+
+        
+
+
+    });
+</script>
