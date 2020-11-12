@@ -1,7 +1,15 @@
 {
+  "name" : "cardinity/cardinity-example-php",
+  "description": "This project is to get an understanding of the php sdk, not to be used on professional project",
+  "repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/cardinity/cardinity-sdk-php"
+    }
+  ],
   "require": {
-    "php": ">=5.4.0",
-    "cardinity/cardinity-sdk-php": "~1.0"
+    "php": ">=7.2.5",
+    "cardinity/cardinity-sdk-php": "~3.0"
   },
   "require-dev": {
   }

@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    #if used as /public on domain directory
+    #RewriteBase /
+    #if used as folder
+    RewriteBase /cardexample/public     
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d 
+    RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+</IfModule>

@@ -5,11 +5,10 @@
     You will be sent back to this site after you
     authorize the transaction.
 </p>
-<form id='ThreeDForm' name="ThreeDForm" method="POST" action="<?php echo $_SESSION['cardinity']['ThreeDForm']; ?>">
+<form id='ThreeDForm' name="ThreeDForm" method="POST" action="<?php echo $_SESSION['cardinity']['acs_url']; ?>">
     <button class="btn btn-success">Click Here</button>
-    <input type="hidden" name="PaReq" value="<?php echo $_SESSION['cardinity']['PaReq']; ?>"/>
-    <input type="hidden" name="TermUrl" value="<?php echo getenv('BASE_URL'); ?>/callback"/>
-    <input type="hidden" name="MD" value="<?php echo $_SESSION['cardinity']['MD']; ?>"/>
+    <input type="hidden" name="creq" value="<?php echo $_SESSION['cardinity']['creq']; ?>"/>
+    <input type="hidden" name="threeDSSessionData" value="<?php echo $_SESSION['cardinity']['threeDSSessionData']; ?>"/>
 </form>
 <script type='text/javascript'>
     window.onload=function(){ 
