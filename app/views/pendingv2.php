@@ -1,3 +1,4 @@
+<h3>3ds v2</h3>
 <p>
     If your browser does not start loading the page after 3 second,
     press the button below.
@@ -12,6 +13,6 @@
 </form>
 <script type='text/javascript'>
     window.onload=function(){ 
-        window.setTimeout(document.ThreeDForm.submit.bind(document.ThreeDForm), 2000);
+        window.setTimeout(document.ThreeDForm.submit.bind(document.ThreeDForm), 3000);
     };
 </script>
