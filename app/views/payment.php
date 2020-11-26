@@ -63,7 +63,7 @@
         <div class="form-group row">
             <label class="col-md-4 col-form-label">Card number</label>
             <div class="col-md-8">
-                <input name="card[pan]" required class="form-control" placeholder="Enter credit card number" value="5454545454545454">
+                <input name="card[pan]" required class="form-control" placeholder="Enter credit card number" value="4200000000000000">
             </div>
         </div>
         <div class="form-group row">

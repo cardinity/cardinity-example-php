@@ -91,7 +91,7 @@ class CardinityController extends Controller
                     $render = $result;
                 }
             }
-            unset($_SESSION['cardinity']);
+            //unset($_SESSION['cardinity']);
         }
 
         $this->view->render($render);
@@ -99,9 +99,7 @@ class CardinityController extends Controller
 
     public function callback3dsv2()
     {
-        /*echo "<pre>";
-        print_r($_POST);
-        exit();*/
+      
         $render = 'payment';
 
         $sessionData = unserialize(base64_decode($_COOKIE['cardinitySessionData']));        
@@ -115,12 +113,12 @@ class CardinityController extends Controller
                     true
                 );
 
-                $result = $this->send($method);
+                $result = $this->senddebug($method);
+
                 if ($result) {
                     $render = $result;
                 }
             }
-            unset($_SESSION['cardinity']);
         }
 
         $this->view->render($render);
@@ -210,6 +208,84 @@ class CardinityController extends Controller
         }
 
         $this->view->render($render);
+    }
+
+
+    private function senddebug($method)
+    {
+        $errors = [];
+
+        try {
+            $payment = $this->client->call($method);
+            $status = $payment->getStatus();
+
+            if ($status == 'approved') {
+                $_SESSION['success'] = 'Transactions successfully completed<br /><b>' . $payment->getId() . '</b>';
+                unset($_SESSION['cardinity']);
+            } elseif ($status == 'pending') {
+
+                //if both set its v1
+                if ($payment->isThreedsV2() && !$payment->isThreedsV1()) {
+
+                    $auth = $payment->getThreeds2data();
+
+                    $pending = [
+                        'acs_url' => $auth->getAcsUrl(),
+                        'creq' => $auth->getCreq(),
+                        'threeDSSessionData' => $payment->getOrderId(),
+                        'PaymentId' => $payment->getId(),
+                    ];
+                    $_SESSION['cardinity'] = $pending;
+    
+                    setcookie('cardinitySessionData',base64_encode(serialize($_SESSION)), time() + 60*60*24);
+    
+                    return 'pendingv2';
+                }else{
+
+                    $auth = $payment->getAuthorizationInformation();
+
+                    $pending = [
+                        'ThreeDForm' => $auth->getUrl(),
+                        'PaReq' => $auth->getData(),
+                        'MD' => $payment->getOrderId(),
+                        'PaymentId' => $payment->getId(),
+                    ];
+                    $_SESSION['cardinity'] = $pending;
+
+                   
+                    setcookie('cardinitySessionData',base64_encode(serialize($_SESSION)), time() + 60*60*24);
+    
+                    return 'pending';
+                }
+               
+            }
+        } catch (Cardinity\Exception\InvalidAttributeValue $exception) {
+            foreach ($exception->getViolations() as $key => $violation) {
+                array_push($errors, $violation->getPropertyPath() . ' ' . $violation->getMessage());
+            }
+        } catch (Cardinity\Exception\ValidationFailed $exception) {
+            foreach ($exception->getErrors() as $key => $error) {
+                array_push($errors, $error['message']);
+            }
+        } catch (Cardinity\Exception\Declined $exception) {
+            foreach ($exception->getErrors() as $key => $error) {
+                array_push($errors, $error['message']);
+            }
+        } catch (Cardinity\Exception\NotFound $exception) {
+            foreach ($exception->getErrors() as $key => $error) {
+                array_push($errors, $error['message']);
+            }
+        } catch (Exception $exception) {
+            $errors = [
+                $exception->getMessage(),
+                //$exception->getPrevious()->getMessage()
+            ];
+        }
+
+        
+        if ($errors) {
+            $_SESSION['errors'] = $errors;
+        }
     }
 
     private function send($method)
