@@ -63,7 +63,7 @@
         <div class="form-group row">
             <label class="col-md-4 col-form-label">Card number</label>
             <div class="col-md-8">
-                <input name="card[pan]" required class="form-control" placeholder="Enter credit card number" value="4200000000000000">
+                <input name="card[pan]" required class="form-control" placeholder="Enter credit card number" value="5454545454545454">
             </div>
         </div>
         <div class="form-group row">
@@ -119,7 +119,7 @@
         document.getElementById("color_depth").value = screen.colorDepth;
         document.getElementById("time_zone").value = new Date().getTimezoneOffset();
 
-        
+
         var availChallengeWindowSizes = [
             [600, 400],
             [500, 600],
@@ -131,8 +131,8 @@
         var cardinity_screen_height = window.innerHeight;
         document.getElementById("challenge_window_size").value = 'full-screen';
 
-        //display below 800x600        
-        if (!(cardinity_screen_width > 800 && cardinity_screen_height > 600)) {                        
+        //display below 800x600
+        if (!(cardinity_screen_width > 800 && cardinity_screen_height > 600)) {
             //find largest acceptable size
             availChallengeWindowSizes.every(function(element, index) {
                 console.log(element);
@@ -144,11 +144,11 @@
                     document.getElementById("challenge_window_size").value = element[0]+'x'+element[1];
                     console.log(element[0]+'x'+element[1]);
                     return false;
-                }        
+                }
             });
         }
 
-        
+
 
 
     });

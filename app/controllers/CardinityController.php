@@ -49,16 +49,16 @@ class CardinityController extends Controller
                     'holder' => $_POST['card']['holder']
                 ],
                 'threeds2_data' =>  [
-                    "notification_url" => getenv('BASE_URL') . "/callback3dsv2", 
+                    "notification_url" => getenv('BASE_URL') . "/callback3dsv2",
                     "browser_info" => [
                         "accept_header" => "text/html",
-						"browser_language" => $_POST['browser_info']['browser_language'] ?? "en-US",
-						"screen_width" => (int) $_POST['browser_info']['screen_width'] ?? 1920,
-						"screen_height" => (int) $_POST['browser_info']['screen_height'] ?? 1040,
-						'challenge_window_size' => $_POST['browser_info']['challenge_window_size'],
-						"user_agent" => $_SERVER['HTTP_USER_AGENT'] ?? "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) Gecko/20100101 Firefox/21.0",
-						"color_depth" => (int) $_POST['browser_info']['color_depth'] ?? 24,
-						"time_zone" =>  (int) $_POST['browser_info']['time_zone'] ?? -60
+                        "browser_language" => $_POST['browser_info']['browser_language'] ?? "en-US",
+            			"screen_width" => (int) $_POST['browser_info']['screen_width'] ?? 1920,
+            			"screen_height" => (int) $_POST['browser_info']['screen_height'] ?? 1040,
+            			'challenge_window_size' => $_POST['browser_info']['challenge_window_size'],
+            			"user_agent" => $_SERVER['HTTP_USER_AGENT'] ?? "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) Gecko/20100101 Firefox/21.0",
+            			"color_depth" => (int) $_POST['browser_info']['color_depth'] ?? 24,
+            			"time_zone" =>  (int) $_POST['browser_info']['time_zone'] ?? -60
                     ],
                 ],
             ]);
@@ -76,7 +76,7 @@ class CardinityController extends Controller
     {
         $render = 'payment';
 
-        $sessionData = unserialize(base64_decode($_COOKIE['cardinitySessionData']));        
+        $sessionData = unserialize(base64_decode($_COOKIE['cardinitySessionData']));
         $_SESSION = $sessionData;
 
         if (isset($_POST['MD']) && isset($_POST['PaRes']) && isset($_SESSION['cardinity'])) {
@@ -99,10 +99,10 @@ class CardinityController extends Controller
 
     public function callback3dsv2()
     {
-      
+
         $render = 'payment';
 
-        $sessionData = unserialize(base64_decode($_COOKIE['cardinitySessionData']));        
+        $sessionData = unserialize(base64_decode($_COOKIE['cardinitySessionData']));
         $_SESSION = $sessionData;
 
         if (isset($_POST['cres']) && isset($_POST['threeDSSessionData']) && isset($_SESSION['cardinity'])) {
@@ -113,7 +113,7 @@ class CardinityController extends Controller
                     true
                 );
 
-                $result = $this->senddebug($method);
+                $result = $this->send($method);
 
                 if ($result) {
                     $render = $result;
@@ -211,7 +211,7 @@ class CardinityController extends Controller
     }
 
 
-    private function senddebug($method)
+    private function send($method)
     {
         $errors = [];
 
@@ -236,9 +236,9 @@ class CardinityController extends Controller
                         'PaymentId' => $payment->getId(),
                     ];
                     $_SESSION['cardinity'] = $pending;
-    
+
                     setcookie('cardinitySessionData',base64_encode(serialize($_SESSION)), time() + 60*60*24);
-    
+
                     return 'pendingv2';
                 }else{
 
@@ -252,12 +252,12 @@ class CardinityController extends Controller
                     ];
                     $_SESSION['cardinity'] = $pending;
 
-                   
+
                     setcookie('cardinitySessionData',base64_encode(serialize($_SESSION)), time() + 60*60*24);
-    
+
                     return 'pending';
                 }
-               
+
             }
         } catch (Cardinity\Exception\InvalidAttributeValue $exception) {
             foreach ($exception->getViolations() as $key => $violation) {
@@ -282,81 +282,10 @@ class CardinityController extends Controller
             ];
         }
 
-        
+
         if ($errors) {
             $_SESSION['errors'] = $errors;
         }
     }
 
-    private function send($method)
-    {
-        $errors = [];
-
-        try {
-            $payment = $this->client->call($method);
-            $status = $payment->getStatus();
-
-            if ($status == 'approved') {
-                $_SESSION['success'] = 'Transactions successfully completed<br /><b>' . $payment->getId() . '</b>';
-            } elseif ($status == 'pending') {
-
-                if ($payment->isThreedsV2()) {
-                    $auth = $payment->getThreeds2data();
-
-                    $pending = [
-                        'acs_url' => $auth->getAcsUrl(),
-                        'creq' => $auth->getCreq(),
-                        'threeDSSessionData' => $payment->getOrderId(),
-                        'PaymentId' => $payment->getId(),
-                    ];
-                    $_SESSION['cardinity'] = $pending;
-    
-                    setcookie('cardinitySessionData',base64_encode(serialize($_SESSION)), time() + 60*60*24);
-    
-                    return 'pendingv2';
-                }else{
-                    $auth = $payment->getAuthorizationInformation();
-
-                    $pending = [
-                        'ThreeDForm' => $auth->getUrl(),
-                        'PaReq' => $auth->getData(),
-                        'MD' => $payment->getOrderId(),
-                        'PaymentId' => $payment->getId(),
-                    ];
-                    $_SESSION['cardinity'] = $pending;
-    
-                    setcookie('cardinitySessionData',base64_encode(serialize($_SESSION)), time() + 60*60*24);
-    
-                    return 'pending';
-                }
-               
-            }
-        } catch (Cardinity\Exception\InvalidAttributeValue $exception) {
-            foreach ($exception->getViolations() as $key => $violation) {
-                array_push($errors, $violation->getPropertyPath() . ' ' . $violation->getMessage());
-            }
-        } catch (Cardinity\Exception\ValidationFailed $exception) {
-            foreach ($exception->getErrors() as $key => $error) {
-                array_push($errors, $error['message']);
-            }
-        } catch (Cardinity\Exception\Declined $exception) {
-            foreach ($exception->getErrors() as $key => $error) {
-                array_push($errors, $error['message']);
-            }
-        } catch (Cardinity\Exception\NotFound $exception) {
-            foreach ($exception->getErrors() as $key => $error) {
-                array_push($errors, $error['message']);
-            }
-        } catch (Exception $exception) {
-            $errors = [
-                $exception->getMessage(),
-                //$exception->getPrevious()->getMessage()
-            ];
-        }
-
-        
-        if ($errors) {
-            $_SESSION['errors'] = $errors;
-        }
-    }
 }
