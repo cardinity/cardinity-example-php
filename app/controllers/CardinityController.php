@@ -76,7 +76,7 @@ class CardinityController extends Controller
     {
         $render = 'payment';
 
-        $sessionData = unserialize(base64_decode($_COOKIE['cardinitySessionData']));
+        $sessionData = json_decode(base64_decode($_COOKIE['cardinitySessionData']), true);
         $_SESSION = $sessionData;
 
         if (isset($_POST['MD']) && isset($_POST['PaRes']) && isset($_SESSION['cardinity'])) {
@@ -102,7 +102,7 @@ class CardinityController extends Controller
 
         $render = 'payment';
 
-        $sessionData = unserialize(base64_decode($_COOKIE['cardinitySessionData']));
+        $sessionData = json_decode(base64_decode($_COOKIE['cardinitySessionData']), true);
         $_SESSION = $sessionData;
 
         if (isset($_POST['cres']) && isset($_POST['threeDSSessionData']) && isset($_SESSION['cardinity'])) {
@@ -237,7 +237,7 @@ class CardinityController extends Controller
                     ];
                     $_SESSION['cardinity'] = $pending;
 
-                    setcookie('cardinitySessionData',base64_encode(serialize($_SESSION)), time() + 60*60*24);
+                    setcookie('cardinitySessionData',base64_encode(json_encode($_SESSION)), time() + 60*60*24);
 
                     return 'pendingv2';
                 }else{
@@ -253,7 +253,7 @@ class CardinityController extends Controller
                     $_SESSION['cardinity'] = $pending;
 
 
-                    setcookie('cardinitySessionData',base64_encode(serialize($_SESSION)), time() + 60*60*24);
+                    setcookie('cardinitySessionData',base64_encode(json_encode($_SESSION)), time() + 60*60*24);
 
                     return 'pending';
                 }
