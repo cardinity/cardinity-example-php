@@ -1,8 +1,9 @@
 <?php
+namespace Core;
 
 class Controller
 {
-    public $view;
+    public View $view;
 
     function __construct()
     {
