@@ -42,7 +42,10 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <?php include $content; ?>
+                        <?php
+                        if (isset($content)) {
+                            include $content;
+                        } ?>
                     </div>
                 </div>
             </div>

@@ -12,5 +12,6 @@
     "cardinity/cardinity-sdk-php": "~3.0"
   },
   "require-dev": {
+    "phpstan/phpstan": "^0.12.90"
   }
 }

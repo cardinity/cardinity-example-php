@@ -1,15 +1,22 @@
 <?php
 
+namespace App\Controllers;
+
 use Cardinity\Client;
 use Cardinity\Method\Payment;
 use Cardinity\Method\Refund;
 use Cardinity\Method\VoidPayment;
 use Cardinity\Method\Settlement;
+use Cardinity\Exception;
+use Cardinity\Method\Payment\Payment as PaymentPayment;
+use Exception as PHPException;
+
+use Core\Controller;
 
 
 class CardinityController extends Controller
 {
-    private $client;
+    private Client $client;
 
     public function __construct()
     {
@@ -259,23 +266,23 @@ class CardinityController extends Controller
                 }
 
             }
-        } catch (Cardinity\Exception\InvalidAttributeValue $exception) {
+        } catch (Exception\InvalidAttributeValue $exception) {
             foreach ($exception->getViolations() as $key => $violation) {
                 array_push($errors, $violation->getPropertyPath() . ' ' . $violation->getMessage());
             }
-        } catch (Cardinity\Exception\ValidationFailed $exception) {
+        } catch (Exception\ValidationFailed $exception) {
             foreach ($exception->getErrors() as $key => $error) {
                 array_push($errors, $error['message']);
             }
-        } catch (Cardinity\Exception\Declined $exception) {
+        } catch (Exception\Declined $exception) {
             foreach ($exception->getErrors() as $key => $error) {
                 array_push($errors, $error['message']);
             }
-        } catch (Cardinity\Exception\NotFound $exception) {
+        } catch (Exception\NotFound $exception) {
             foreach ($exception->getErrors() as $key => $error) {
                 array_push($errors, $error['message']);
             }
-        } catch (Exception $exception) {
+        } catch (PHPException $exception) {
             $errors = [
                 $exception->getMessage(),
                 //$exception->getPrevious()->getMessage()
