@@ -1,6 +1,5 @@
 <?php
 
-namespace App\Controllers;
 
 use Cardinity\Client;
 use Cardinity\Method\Payment;
@@ -10,9 +9,6 @@ use Cardinity\Method\Settlement;
 use Cardinity\Exception;
 use Cardinity\Method\Payment\Payment as PaymentPayment;
 use Exception as PHPException;
-
-use Core\Controller;
-
 
 class CardinityController extends Controller
 {

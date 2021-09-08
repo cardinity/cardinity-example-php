@@ -1,7 +1,5 @@
 <?php
 
-namespace Core;
-
 class View
 {
     function render(string $view, string $layout = 'app')
