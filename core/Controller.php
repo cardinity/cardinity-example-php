@@ -1,6 +1,4 @@
 <?php
-namespace Core;
-
 class Controller
 {
     public View $view;
