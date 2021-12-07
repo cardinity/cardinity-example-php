@@ -10,13 +10,25 @@ use Cardinity\Exception;
 use Cardinity\Method\Payment\Payment as PaymentPayment;
 use Exception as PHPException;
 
+
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
+
 class CardinityController extends Controller
 {
     private Client $client;
+    private $translator;
 
     public function __construct()
     {
         parent::__construct();
+
+
+        /*Translation helper*/
+        $this->translator = new Translator('bn');//you should set this based on selected locale
+        $this->translator->addLoader('yaml', new YamlFileLoader());
+        $this->translator->addResource('yaml', __DIR__ . '/../locale/bn_BN.yaml', 'bn');
+        //$this->translator->addResource('yaml', __DIR__ . '/../locale/en_EN.yaml', 'en'); ....
 
         $this->client = Client::create([
             'consumerKey' => getenv('CRD_CONSUMER_KEY'),
@@ -27,7 +39,6 @@ class CardinityController extends Controller
     public function index()
     {
         $render = 'index';
-
         $this->view->render($render);
     }
 
@@ -264,19 +275,19 @@ class CardinityController extends Controller
             }
         } catch (Exception\InvalidAttributeValue $exception) {
             foreach ($exception->getViolations() as $key => $violation) {
-                array_push($errors, $violation->getPropertyPath() . ' ' . $violation->getMessage());
+                array_push($errors, $violation->getPropertyPath() . ' ' . $this->trans($violation->getMessage()));
             }
         } catch (Exception\ValidationFailed $exception) {
             foreach ($exception->getErrors() as $key => $error) {
-                array_push($errors, $error['message']);
+                array_push($errors, $this->trans($error['message']));
             }
         } catch (Exception\Declined $exception) {
             foreach ($exception->getErrors() as $key => $error) {
-                array_push($errors, $error['message']);
+                array_push($errors, $this->trans($error['message']));
             }
         } catch (Exception\NotFound $exception) {
             foreach ($exception->getErrors() as $key => $error) {
-                array_push($errors, $error['message']);
+                array_push($errors, $this->trans($error['message']));
             }
         } catch (PHPException $exception) {
             $errors = [
@@ -289,6 +300,12 @@ class CardinityController extends Controller
         if ($errors) {
             $_SESSION['errors'] = $errors;
         }
+    }
+
+    /*Translation helper*/
+    function trans($string){
+        echo "tried translating $string";
+        return $this->translator->trans($string);
     }
 
 }
