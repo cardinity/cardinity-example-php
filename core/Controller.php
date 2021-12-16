@@ -1,7 +1,7 @@
 <?php
 class Controller
 {
-    public View $view;
+    public $view;
 
     function __construct()
     {

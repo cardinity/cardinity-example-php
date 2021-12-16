@@ -16,9 +16,9 @@ This sample code is provided for illustrative purposes only. Any use of this rep
 0) Download the files
 1) Navigate to directory location
 3) Run composer ```php composer.phar install```
-4) Rename file ```.env.example``` into ```.env``` and fill the Cardinity API credentials
-5) Start internal PHP server ```php -S localhost:8000 -t public```
-6) Launch browser with url ```http://localhost:8000```
+4) Rename file ```.env.example``` into ```.env``` and fill the Cardinity API credentials and your base URL, localhost is restricted in our gateway so use IP address or fake domain
+5) Start internal PHP server ```php -S your.ip.address:8000 -t public```
+6) Launch browser with url ```http://your.ip.address:8000```
 
 ### Documentation
 Official Cardinity API documentation can be found <a href="https://developers.cardinity.com/api/v1/">here</a>
@@ -47,5 +47,3 @@ payment gateway, credit card payment, online payment, credit card processing, on
 
   
  [▲ back to top](#cardinity-client-php-example)
-<!--
-**fjundzer/fjundzer** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.

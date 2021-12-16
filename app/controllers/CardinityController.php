@@ -12,7 +12,7 @@ use Exception as PHPException;
 
 class CardinityController extends Controller
 {
-    private Client $client;
+    private $client;
 
     public function __construct()
     {
