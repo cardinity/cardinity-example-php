@@ -3,6 +3,7 @@
 
 use Cardinity\Client;
 use Cardinity\Method\Payment;
+use Cardinity\Method\PaymentLink;
 use Cardinity\Method\Refund;
 use Cardinity\Method\VoidPayment;
 use Cardinity\Method\Settlement;
@@ -122,6 +123,138 @@ class CardinityController extends Controller
                     $render = $result;
                 }
             }
+        }
+
+        $this->view->render($render);
+    }
+
+
+    public function paymentLink()
+    {
+        $render = 'payment_link';
+
+        if (isset($_POST['order'])) {
+
+            $dateSelected = null;
+            if($_POST['order']['exp_year'] != ""){
+                $dateSelected = $_POST['order']['exp_year']."-".$_POST['order']['exp_month']."-".$_POST['order']['exp_date']."T15:26:03.702Z";
+            }
+
+            $method = new PaymentLink\Create([
+                'amount' => (float)sprintf('%.2f', $_POST['order']['amount']),
+                'currency' => $_POST['order']['currency'],
+                'description' => $_POST['order']['description'],
+
+                'country' => ($_POST['order']['country'] != '' ? $_POST['order']['country'] : null),
+                'expiration_date' => $dateSelected,
+                'multiple_use' => ($_POST['order']['multiple_use'] == 1 ? true : false),
+            ]);
+
+            $errors = [];
+
+            try {
+                $paymentLink = $this->client->call($method);
+            } catch (Exception\InvalidAttributeValue $exception) {
+                foreach ($exception->getViolations() as $key => $violation) {
+                    array_push($errors, $violation->getPropertyPath() . ' ' . $violation->getMessage());
+                }
+            } catch (Exception\ValidationFailed $exception) {
+                foreach ($exception->getErrors() as $key => $error) {
+                    array_push($errors, $error['message']);
+                }
+            } catch (\Exception $e) {
+                array_push($errors, $error[$e->getMessage()]);
+            }
+
+            if($paymentLink){
+                $_SESSION['payment_link_id'] = $paymentLink->getId();
+
+                $_SESSION['success'] = 'Payment Link successfully created<br/><b>'
+                . $paymentLink->getId()
+                . '</b><br/>'
+                .'<pre>'.print_r($paymentLink->serialize(), true).'</pre>'
+                . 'View and Edit payment link - <a href="/payment_link_view">here</a>'
+                . '</b>';
+            }
+        }
+
+        if ($errors) {
+            $_SESSION['errors'] = $errors;
+        }
+
+        $this->view->render($render);
+    }
+
+    public function paymentLinkView()
+    {
+        $render = 'payment_link_view';
+
+        $errors = [];
+
+        if (isset($_SESSION['payment_link_id'])) {
+
+            $linkid = $_SESSION['payment_link_id'];
+            $method = new PaymentLink\Get($linkid);
+
+            try {
+                $paymentLink = $this->client->call($method);
+            } catch (\Exception $e) {
+                print_r($e);
+                exit();
+                array_push($errors, $e->getMessage());
+            }
+
+            if($paymentLink){
+                $_SESSION['payment_link'] = $paymentLink;
+            }
+        }else{
+            $render = 'payment_link';
+        }
+
+
+        if (isset($_POST['order'])) {
+            $dateSelected = null;
+            if($_POST['order']['exp_year'] != ""){
+                $dateSelected = $_POST['order']['exp_year']."-".$_POST['order']['exp_month']."-".$_POST['order']['exp_date']."T15:26:03.702Z";
+            }
+
+            $updateMethod = new PaymentLink\Update(
+                $_SESSION['payment_link_id'],
+                [
+                    'expiration_date' => $dateSelected,
+                    'enabled' => ($_POST['order']['enabled'] == 1 ? true : false),
+                ]
+            );
+
+            try {
+                $updatedPaymentLink = $this->client->call($updateMethod);
+            } catch (Exception\InvalidAttributeValue $exception) {
+                foreach ($exception->getViolations() as $key => $violation) {
+                    array_push($errors, $violation->getPropertyPath() . ' ' . $violation->getMessage());
+                }
+            } catch (Exception\ValidationFailed $exception) {
+                foreach ($exception->getErrors() as $key => $error) {
+                    array_push($errors, $error['message']);
+                }
+            } catch (Exception\MethodNotAllowed $exception) {
+                foreach ($exception->getViolations() as $key => $violation) {
+                    array_push($errors, $violation->getPropertyPath() . ' ' . $violation->getMessage());
+                }
+            } catch (\Exception $e) {
+                array_push($errors, $error[$e->getMessage()]);
+                print_r($e);
+            }
+
+            if($updatedPaymentLink){
+                $_SESSION['success'] = 'Payment Link successfully updated<br/>'.
+                '<b>'. $updatedPaymentLink->getId(). '</b>'
+                .'<pre>'.print_r($updatedPaymentLink->serialize(), true).'</pre>'
+                ;
+            }
+        }
+
+        if ($errors) {
+            $_SESSION['errors'] = $errors;
         }
 
         $this->view->render($render);

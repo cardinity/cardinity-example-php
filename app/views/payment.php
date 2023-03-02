@@ -70,7 +70,7 @@
             <label class="col-md-4 col-form-label">Expiration date</label>
             <div class="col-md-4">
                 <select name="card[exp_year]" required class="form-control">
-                    <option value="2022">2022</option>
+                    <option value="<?php echo date('Y')?>"><?php echo date('Y')?></option>
                     <option value="">Year</option>
                     <?php for ($i = date('Y'); $i <= date('Y', strtotime('+10 years')); $i++) : ?>
                         <option value="<?php echo $i; ?>"><?php echo $i; ?></option>

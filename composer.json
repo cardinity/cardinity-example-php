@@ -9,7 +9,7 @@
   ],
   "require": {
     "php": ">=7.2.5",
-    "cardinity/cardinity-sdk-php": "~3.0"
+    "cardinity/cardinity-sdk-php": "~3.1"
   },
   "require-dev": {
     "phpstan/phpstan": "^0.12.90"
