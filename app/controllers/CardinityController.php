@@ -248,7 +248,7 @@ class CardinityController extends Controller
             if($updatedPaymentLink){
                 $_SESSION['success'] = 'Payment Link successfully updated<br/>'.
                 '<b>'. $updatedPaymentLink->getId(). '</b>'
-                .'<pre>'.print_r($updatedPaymentLink->serialize(), true).'</pre>'
+                ."<pre>".json_encode(json_decode($updatedPaymentLink->serialize()), JSON_PRETTY_PRINT)."</pre>"
                 ;
             }
         }

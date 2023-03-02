@@ -6,12 +6,7 @@
         <legend>Update Payment Link</legend>
         <legend><b><?php echo $paymentLink->getId()?></b></legend>
         <br/>
-        <pre>
-            <?php
-            print_r($paymentLink);
-            print_r($paymentLink->serialize());
-            ?>
-        </pre>
+        <pre><?php echo json_encode(json_decode($paymentLink->serialize()), JSON_PRETTY_PRINT);?></pre>
 
         <div class="form-group row">
             <label class="col-md-4 col-form-label">Expiration date</label>
