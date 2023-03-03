@@ -4,6 +4,9 @@
             <a class="nav-link" href="payment">Create new payment</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="payment_link">Create new payment link</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="recurring">Create recurring payment</a>
         </li>
         <li class="nav-item">
