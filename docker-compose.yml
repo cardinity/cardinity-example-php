@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  php:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      # Application files
+      - ".:/var/www/html"
+    working_dir: /var/www/html
+    command: php -S 0.0.0.0:8000 -t public
+    ports:
+      - "8000:8000"
