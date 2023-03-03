@@ -132,6 +132,7 @@ class CardinityController extends Controller
     public function paymentLink()
     {
         $render = 'payment_link';
+        $errors = [];
 
         if (isset($_POST['order'])) {
 
@@ -150,7 +151,6 @@ class CardinityController extends Controller
                 'multiple_use' => ($_POST['order']['multiple_use'] == 1 ? true : false),
             ]);
 
-            $errors = [];
 
             try {
                 $paymentLink = $this->client->call($method);

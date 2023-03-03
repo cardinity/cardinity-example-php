@@ -19,7 +19,7 @@
         <div class="form-group row">
             <label class="col-md-4 col-form-label">Description</label>
             <div class="col-md-8">
-                <input name="order[description]" class="form-control" placeholder="Description" />
+                <input name="order[description]" required class="form-control" placeholder="Description" />
             </div>
         </div>
 
@@ -37,15 +37,15 @@
             <label class="col-md-4 col-form-label">Expiration date</label>
             <div class="col-md-3">
                 <select name="order[exp_year]"  class="form-control">
-                    <option value="">No End</option>
-                    <?php for ($i = date('Y'); $i <= date('Y', strtotime('+10 years')); $i++) : ?>
+                    <option value="">--</option>
+                    <?php for ($i = date('Y'); $i <= date('Y', strtotime('+1 years')); $i++) : ?>
                         <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                     <?php endfor; ?>
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 px-0">
                 <select name="order[exp_month]"  class="form-control">
-                    <option value="">Month</option>
+                    <option value="">--</option>
                     <?php for ($i = 1; $i <= 12; $i++) : ?>
                         <option value="<?php echo sprintf('%02d', $i); ?>"><?php echo sprintf('%02d', $i);  ?></option>
                     <?php endfor; ?>
@@ -53,12 +53,13 @@
             </div>
             <div class="col-md-3">
                 <select name="order[exp_date]"  class="form-control">
-                    <option value="">Date</option>
+                    <option value="">--</option>
                     <?php for ($i = 1; $i <= 31; $i++) : ?>
                         <option value="<?php echo sprintf('%02d', $i); ?>"><?php echo sprintf('%02d', $i);  ?></option>
                     <?php endfor; ?>
                 </select>
             </div>
+            <div class='col-md-4'></div><div class='col-md-8 col-offset-4'><small>* If no date selected, default expiry is 7 days</small></div>
         </div>
         <div class="form-group row">
                 <label class="col-md-4 col-form-label">Allow Multiple</label>
